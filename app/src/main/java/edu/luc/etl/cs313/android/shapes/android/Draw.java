@@ -30,13 +30,14 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onStrokeColor(final StrokeColor c) {
-        canvas.setColor(c);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(c.getColor());
         return null;
     }
 
     @Override
     public Void onFill(final Fill f) {
-        canvas.setColor(f);
+        paint.setStyle(Paint.Style.FILL);
         return null;
     }
 
@@ -48,13 +49,13 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onLocation(final Location l) {
-        //waiting on BoundingBox to be completed to fiqure this one out
+        canvas.translate(l.getX(), l.getY());
         return null;
     }
 
     @Override
     public Void onRectangle(final Rectangle r) {
-        canvas.drawRect(0, 0, r.getWidth(), r.getHeight(), paint)
+        canvas.drawRect(0, 0, r.getWidth(), r.getHeight(), paint);
         return null;
     }
 
@@ -67,7 +68,12 @@ public class Draw implements Visitor<Void> {
     @Override
     public Void onPolygon(final Polygon s) {
         //not sure if more is needed here
-        final float[] pts = null;
+        final float[] pts = new float[s.getPoints().size() * 2];
+        int index = 0;
+        for ( Point point : s.getPoints()) {
+            pts[index++] = point.getX();
+            pts[index++] = point.getY();
+        }
 
         canvas.drawLines(pts, paint);
         return null;
