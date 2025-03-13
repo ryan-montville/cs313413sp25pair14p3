@@ -43,7 +43,7 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onGroup(final Group g) {
-        //Still neede to be finished
+        // need to finish
         return null;
     }
 
