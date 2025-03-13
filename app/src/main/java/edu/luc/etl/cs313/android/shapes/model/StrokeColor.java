@@ -8,7 +8,7 @@ public class StrokeColor implements Shape {
 
     // TODO entirely your job - maybe done
     protected final int color;
-    protected final Shape shape
+    protected final Shape shape;
 
     public StrokeColor(final int color, final Shape shape) {
         this.shape = shape;
