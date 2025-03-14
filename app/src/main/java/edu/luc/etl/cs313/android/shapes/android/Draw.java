@@ -5,6 +5,8 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import edu.luc.etl.cs313.android.shapes.model.*;
 
+import java.util.List;
+
 /**
  * A Visitor for drawing a shape to an Android canvas.
  */
@@ -40,8 +42,10 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onFill(final Fill f) {
-        paint.setStyle(Paint.Style.FILL);
-        System.out.println("Style set to fill");
+        if (paint.getStyle() != Paint.Style.FILL_AND_STROKE) {
+            paint.setStyle(Paint.Style.FILL);
+            System.out.println("Style set to fill");
+        }
         f.getShape().accept(this);
         System.out.println("Accepted shape " + f.getShape());
         return null;
@@ -84,16 +88,26 @@ public class Draw implements Visitor<Void> {
 
     @Override
     public Void onPolygon(final Polygon s) {
-        final float[] pts = new float[s.getPoints().size() * 2];
-        int index = 0;
-        for ( Point point : s.getPoints()) {
-            pts[index++] = point.getX();
-            pts[index++] = point.getY();
+        final List<? extends Point> points = s.getPoints();
+        final int numPoints = points.size();
+        if (numPoints < 2) {
+            return null; //If polygon has less than two points, it's not really a polygon
         }
-        System.out.println("got points with size " + pts.length);
+        final float[] pts = new float[numPoints * 4];
+        int index = 0;
 
+        for (int i =0; i < numPoints; i++) {
+            Point currentPoint = points.get(i);
+            pts[index++] = currentPoint.getX();
+            pts[index++] = currentPoint.getY();
+            Point nextPoint = points.get((i + 1) % numPoints);
+            pts[index++] = nextPoint.getX();
+            pts[index++] = nextPoint.getY();
+        }
+
+        System.out.println("Got points array with length: " + pts.length);
         canvas.drawLines(pts, paint);
-        System.out.println("drawing polygon lines");
+        System.out.println("Drawing polygon lines");
         return null;
     }
 }
