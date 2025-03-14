@@ -10,8 +10,6 @@ import edu.luc.etl.cs313.android.shapes.model.*;
  */
 public class Draw implements Visitor<Void> {
 
-    // TODO entirely your job (except onCircle)
-
     private final Canvas canvas;
 
     private final Paint paint;
@@ -31,6 +29,7 @@ public class Draw implements Visitor<Void> {
     @Override
     public Void onStrokeColor(final StrokeColor c) {
         paint.setColor(c.getColor());
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         c.getShape().accept(this);
         return null;
     }

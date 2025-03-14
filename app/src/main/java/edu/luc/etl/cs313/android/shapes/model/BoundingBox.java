@@ -47,7 +47,8 @@ return new Location(minimumX,minimumY, new Rectangle(maximumX - minimumX, maximu
 }
     @Override
     public Location onLocation(final Location l) {
-return null;
+        Location innerBox = l.getShape().accept(this);
+        return new Location(l.getX() + innerBox.getX(), l.getY() + innerBox.getY(), innerBox.getShape());
     }
 
     @Override
@@ -67,6 +68,16 @@ return null;
 
     @Override
     public Location onPolygon(final Polygon s) {
-        return null;
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        for (Point point : s.getPoints()) {
+            minX = Math.min(minX, point.getX());
+            maxX = Math.max(maxX, point.getX());
+            minY = Math.min(minY, point.getY());
+            maxY = Math.max(maxY, point.getY());
+        }
+        return new Location(minX, minY, new Rectangle(maxX - minX, maxY - minY));
     }
 }
