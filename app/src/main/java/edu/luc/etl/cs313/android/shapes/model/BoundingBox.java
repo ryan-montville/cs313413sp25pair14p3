@@ -26,7 +26,10 @@ public class BoundingBox implements Visitor<Location> {
         if (Shapes.isEmpty()) {
             return new Location(0, 0, new Rectangle(0, 0));
         }
-        int minimumX = Integer.MAX_VALUE, minimumY = Integer.MAX_VALUE, maximumX = 0, maximumY = 0;
+        int minimumX = Integer.MAX_VALUE;
+        int minimumY = Integer.MAX_VALUE;
+        int maximumX = Integer.MIN_VALUE;
+        int maximumY = Integer.MIN_VALUE;
 
         for (Shape s : Shapes){
         Location location = s.accept(this);
@@ -38,7 +41,7 @@ public class BoundingBox implements Visitor<Location> {
         minimumX = Math.min(minimumX, x);
         minimumY = Math.min(minimumY, y);
         maximumX = Math.max(maximumX, x + widthOfShape);
-        maximumY = Math.max(maximumY, y + widthOfShape);
+        maximumY = Math.max(maximumY, y + heightOfShape);
         }
 return new Location(minimumX,minimumY, new Rectangle(maximumX - minimumX, maximumY - minimumY));
 }
