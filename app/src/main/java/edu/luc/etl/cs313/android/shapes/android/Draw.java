@@ -23,28 +23,36 @@ public class Draw implements Visitor<Void> {
     @Override
     public Void onCircle(final Circle c) {
         canvas.drawCircle(0, 0, c.getRadius(), paint);
+        System.out.println("Draw circle with radius " + c.getRadius());
         return null;
     }
 
     @Override
     public Void onStrokeColor(final StrokeColor c) {
-        paint.setColor(c.getColor());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        System.out.println("Style set to fill and stroke");
+        paint.setColor(c.getColor());
+        System.out.println("Color changed to " + c.getColor());
         c.getShape().accept(this);
+        System.out.println("Accepted shape " + c.getShape());
         return null;
     }
 
     @Override
     public Void onFill(final Fill f) {
         paint.setStyle(Paint.Style.FILL);
+        System.out.println("Style set to fill");
         f.getShape().accept(this);
+        System.out.println("Accepted shape " + f.getShape());
         return null;
     }
 
     @Override
     public Void onGroup(final Group g) {
+        System.out.println("Starting group");
         for (Shape shape: g.getShapes()) {
             shape.accept(this);
+            System.out.println("Accepted shape " + shape);
         }
         return null;
     }
@@ -52,34 +60,40 @@ public class Draw implements Visitor<Void> {
     @Override
     public Void onLocation(final Location l) {
         canvas.translate(l.getX(), l.getY());
+        System.out.println("Translating to " + l.getX() + " " + l.getY());
         l.getShape().accept(this);
+        canvas.translate(-l.getX(), -l.getY());
         return null;
     }
 
     @Override
     public Void onRectangle(final Rectangle r) {
         canvas.drawRect(0, 0, r.getWidth(), r.getHeight(), paint);
+        System.out.println("Drawing rect with " + r.getHeight() + " height adn " + r.getWidth() + " width");
         return null;
     }
 
     @Override
     public Void onOutline(Outline o) {
         paint.setStyle(Paint.Style.STROKE);
+        System.out.println("Style set to stroke");
         o.getShape().accept(this);
+        System.out.println("accepted shape " + o.getShape());
         return null;
     }
 
     @Override
     public Void onPolygon(final Polygon s) {
-        //not sure if more is needed here
         final float[] pts = new float[s.getPoints().size() * 2];
         int index = 0;
         for ( Point point : s.getPoints()) {
             pts[index++] = point.getX();
             pts[index++] = point.getY();
         }
+        System.out.println("got points with size " + pts.length);
 
         canvas.drawLines(pts, paint);
+        System.out.println("drawing polygon lines");
         return null;
     }
 }
