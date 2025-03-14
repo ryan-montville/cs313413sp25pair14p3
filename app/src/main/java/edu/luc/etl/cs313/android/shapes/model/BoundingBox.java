@@ -43,8 +43,8 @@ public class BoundingBox implements Visitor<Location> {
         maximumX = Math.max(maximumX, x + widthOfShape);
         maximumY = Math.max(maximumY, y + heightOfShape);
         }
-return new Location(minimumX,minimumY, new Rectangle(maximumX - minimumX, maximumY - minimumY));
-}
+        return new Location(minimumX,minimumY, new Rectangle(maximumX - minimumX, maximumY - minimumY));
+    }
     @Override
     public Location onLocation(final Location l) {
         Location changedLocation= l.getShape().accept(this);
